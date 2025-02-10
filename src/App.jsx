@@ -1,25 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React from "react";
 import "./App.css";
 import TaskColumn from "./components/TaskColumn";
-import axios from "axios";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import CreateUpdateTask from "./components/CreateUpdateTask";
 import { useTask } from "./Context/TaskContext.jsx";
 
-const STATUS_MAP = {
-  pending: "Not Started",
-  in_progress: "In Progress",
-  completed: "Completed",
-};
-const STATUS_MAP_REV = {
-  "Not Started": "pending",
-  "In Progress": "in_progress",
-  Completed: "completed",
-};
 const App = () => {
-  const [todos, setTodos] = useState([]);
   const { tasks, showModal, updateTaskId } = useTask();
 
   return (

@@ -1,12 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import TaskCard from "./TaskCard";
-import { motion } from "framer-motion";
 import { useDrop } from "react-dnd";
-import CreateUpdateTask from "./CreateUpdateTask";
 import { useTask } from "../Context/TaskContext";
 
 export default function TaskColumn({ taskList, title, type, updatingTaskIds }) {
-  const { moveTask, onTaskCreate, showModal, setShowModal } = useTask();
+  const { moveTask, onTaskCreate, setShowModal } = useTask();
   const [collectedProps, drop] = useDrop({
     accept: "TASK",
     drop: (item) => {
@@ -14,7 +12,6 @@ export default function TaskColumn({ taskList, title, type, updatingTaskIds }) {
       if (item.source === type) {
         return;
       }
-      //onTaskMove(item.source, type, item);
       moveTask(item.source, type, item);
     },
   });

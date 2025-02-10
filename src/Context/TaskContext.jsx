@@ -29,7 +29,6 @@ export const TaskProvider = ({ children }) => {
     } catch (error) {}
   }
   async function updateTask(taskData) {
-    //setUpdatingTaskIds(...updatingTaskIds, [...taskData._id]);
     try {
       let res = await axios.put(
         `https://shrimo.com/fake-api/todos/${taskData._id}`,
@@ -37,7 +36,6 @@ export const TaskProvider = ({ children }) => {
       );
       console.log("res update", res);
       if (res.data) {
-        //setUpdatingTaskIds([]);
       }
     } catch (e) {}
   }
@@ -45,19 +43,30 @@ export const TaskProvider = ({ children }) => {
     console.log(source, destination, data);
 
     setTasks((prevTodos) => {
+      // Create copies of the source and destination columns to avoid mutating state directly
       const sourceColumn = [...prevTodos[source]];
       const destColumn = [...prevTodos[destination]];
+
+      // Find the index of the item being moved in the source column
       const movedItemIndex = sourceColumn.findIndex(
         (item) => item._id === data.id
       );
+
+      // If the item is not found, return the previous state unchanged
       if (movedItemIndex === -1) return prevTodos;
+
+      // Update the task status on the server
       updateTask({
         ...sourceColumn[movedItemIndex],
         ...{ status: STATUS_MAP[destination] },
       });
+      // Remove the item from the source column and store it
       const [movedItem] = sourceColumn.splice(movedItemIndex, 1);
+
+      // Add the moved item to the destination column
       destColumn.push(movedItem);
 
+      // Return the updated task list with the new column assignments
       return {
         ...prevTodos,
         [source]: sourceColumn,
@@ -69,14 +78,19 @@ export const TaskProvider = ({ children }) => {
   function onTaskCreate(data, id) {
     let existingTaskId = id || data.id || "";
     setTasks((prevTodos) => {
+      // Combine all tasks into a single array for easy lookup
       const allTasks = [
         ...prevTodos.pending,
         ...prevTodos.in_progress,
         ...prevTodos.completed,
       ];
+      // Find if the task already exists
       const existingTask = allTasks.find((task) => task._id === existingTaskId);
+
+      // Assign the existing task ID to the new data
       data["_id"] = existingTaskId;
       if (existingTask) {
+        // If task exists, update it in its respective column
         return {
           ...prevTodos,
           [STATUS_MAP_REV[data.status]]: prevTodos[
@@ -84,12 +98,13 @@ export const TaskProvider = ({ children }) => {
           ].map((task) => (task._id === existingTaskId ? data : task)),
         };
       } else {
+        // If task does not exist, add it to the correct list based on its status
         return {
           ...prevTodos,
           [STATUS_MAP_REV[data.status]]: [
             ...prevTodos[STATUS_MAP_REV[data.status]],
             data,
-          ], // ✅ Add new task to the correct list
+          ], // Add new task to the correct list
         };
       }
     });
@@ -99,7 +114,6 @@ export const TaskProvider = ({ children }) => {
       let res = await axios.delete(`https://shrimo.com/fake-api/todos/${id}`);
       console.log("res update", res);
       if (res.data) {
-        //setUpdatingTaskIds([]);
         setTasks((prevTasks) => ({
           pending: prevTasks.pending.filter((task) => task._id !== id),
           in_progress: prevTasks.in_progress.filter((task) => task._id !== id),
