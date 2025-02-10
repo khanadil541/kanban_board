@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+html {
+  font-size: 16px;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+.react-datepicker,
+.react-datepicker__header {
+  background-color: #4b5563 !important;
+  border: transparent !important;
+}
+
+.react-datepicker__header h2 {
+  color: white !important;
+}
+
+.react-datepicker__triangle {
+  fill: #4b5563 !important;
+  border: 1px solid #4b5563 !important;
+
+}
+
+.react-datepicker__day-name {
+  color: #fff !important;
+}
+
+.react-datepicker__day {
+  color: #fff !important;
+}
+
+.react-datepicker__day--selected {
+  background: #2563eb !important;
+}
+
+.react-datepicker__day--disabled {
+  opacity: .3 !important;
+}
